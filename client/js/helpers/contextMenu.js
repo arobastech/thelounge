@@ -170,6 +170,26 @@ export function generateChannelContextMenu($root, channel, network) {
 		});
 	}
 
+	const humanFriendlyChanTypeMap = {
+		lobby: "network",
+		channel: "channel",
+		query: "conversation",
+	};
+
+	const chanType = humanFriendlyChanTypeMap[channel.type];
+
+	items.push({
+		label: channel.muted ? `Unmute ${chanType}` : `Mute ${chanType}`,
+		type: "item",
+		class: "mute",
+		action() {
+			socket.emit("mute:change", {
+				target: channel.id,
+				setMutedTo: !channel.muted,
+			});
+		},
+	});
+
 	// Add close menu item
 	items.push({
 		label: closeMap[channel.type],
